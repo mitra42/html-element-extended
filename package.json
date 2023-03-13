@@ -1,0 +1,28 @@
+{
+  "author": {
+    "name": "Mitra Ardron",
+    "email": "mitra@mitra.biz",
+    "url": "https://www.mitra.biz"
+  },
+  "browserslist": "> 20%, not dead",
+  "bugs": "https://github.com/mitra42/html-element-extended/issues",
+  "description": "A simple wrapper for web components and some examples",
+  "dependencies": {
+    "qrcode": "^1.5.1",
+    "@undecaf/zbar-wasm": "^0.9.11",
+    "@undecaf/barcode-detector-polyfill": "^0.9.13"
+  },
+  "devDependencies": {
+    "eslint": "^7.27.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-plugin-babel": "^5.3.1",
+    "eslint-plugin-import": "^2.23.3",
+    "eslint-plugin-jest": "^24.3.6"
+  },
+  "homepage": "https://github.com/mitra42/html-element-extended",
+  "keywords": ["web components"],
+  "license": "AGPL-3.0",
+  "name": "html-element-extended",
+  "scripts": {},
+  "version": "0.0.1"
+}
