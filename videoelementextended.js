@@ -22,7 +22,7 @@ class YouTubeVideo extends HTMLElementExtended {
   videoid() {
     // Canonicalize any of a variety of URLs into one standard https://youtube.com/abcdef12345
     // TODO-rss canonicalize in sql an content.yaml so rss converter can be simpler
-    return this.state.src.replace(/^http(s)?:\/\/(www.)?(youtube.com|youtu.be)\/(watch\?v=)?([a-zA-Z0-9-_]+)$/, '$5');
+    return this.state.src.replace(/^http(s)?:\/\/(www.)?(youtube.com|youtu.be)\/(v\/)?(watch\?v=)?([a-zA-Z0-9-_]+).*$/, '$6');
   }
   iframesrc() { // Return src converted how YouTube wants it
     return `https://www.youtube.com/embed/${this.videoid()}`;
@@ -36,13 +36,13 @@ class YouTubeVideo extends HTMLElementExtended {
             ]);
          */
     return EL('iframe', {
-      width: '100%', height: '100%',
-      src: this.iframesrc(),
-      frameBorder: '0',
-      allow: 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture',
-      allowFullScreen: true,
-    },
-    []);
+        width: '100%', height: '100%',
+        src: this.iframesrc(),
+        frameBorder: '0',
+        allow: 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture',
+        allowFullScreen: true,
+      },
+      []);
   }
 }
 customElements.define('youtube-video', YouTubeVideo);
@@ -60,13 +60,13 @@ class VimeoVideo extends HTMLElementExtended {
   render() { // TODO Note this has to match transformation in Main.js of content-video for RSS and ATOM
     // <iframe width="100%" height="550" src="https://player.vimeo.com/video/403530213" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe>
     return EL('iframe', {
-      width: '100%', height: '100%',
-      src: `https://player.vimeo.com/video/${this.videoid()}`,
-      frameBorder: '0',
-      allow: 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture',
-      allowFullScreen: true,
-    },
-    []);
+        width: '100%', height: '100%',
+        src: `https://player.vimeo.com/video/${this.videoid()}`,
+        frameBorder: '0',
+        allow: 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture',
+        allowFullScreen: true,
+      },
+      []);
   }
 }
 customElements.define('vimeo-video', VimeoVideo);
@@ -252,11 +252,11 @@ class ContentVideo extends HTMLElementExtended {
             ? EL('archive-video', { item: this.state.archiveitem, file: this.state.file })
             : this.state.src.includes('youtube')
               ? EL('youtube-video', { src: this.state.src })
-            : this.state.src.includes('vimeo')
-              ? EL('vimeo-video', { src: this.state.src })
-              : EL('video', { width: '100%', height: '100%', controls: true }, [
-                EL('source', { src: this.state.src, type: 'video/mp4' }),
-              ]),
+              : this.state.src.includes('vimeo')
+                ? EL('vimeo-video', { src: this.state.src })
+                : EL('video', { width: '100%', height: '100%', controls: true }, [
+                  EL('source', { src: this.state.src, type: 'video/mp4' }),
+                ]),
       ]),
     ];
   }
