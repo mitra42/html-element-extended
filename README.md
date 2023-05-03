@@ -8,9 +8,21 @@ without the complication or overhead.
 In particular there is no compile-time step for this library,
 each of the files can be loaded as a module. 
 
-I am not 100% sure of best practice for modules, rather than 
-node libraries that use require - if there is a better way to do 
-organize this please open an issue and I'll do a "major version" revision.
+To use this, (currently, until its on npmjs.com)
+To a caller add to `package.json/dependencies`
+```
+"html-element-extended": "https://github.com/mitra42/html-element-extended",
+```
+Then in your webcomponents.js file for example include it with
+```
+import { EL, HTMLElementExtended, getUrl } from './node_modules/html-element-extended/htmlelementextended.js';
+import { ContentVideo } from './node_modules/html-element-extended/videoelementextended.js';
+import { QRScanExtended, QRCodeExtended } from './node_modules/html-element-extended/qrlementextended.js';
+```
+To add a new module,
+* Add a file here xxxelementextended.js
+* Add to the docs here
+* Add to package.json/exports
 
 Each module is documented internally but as a TL;DR
 
