@@ -9,6 +9,7 @@
   "description": "A simple wrapper for web components and some examples",
   "dependencies": {
     "qrcode": "^1.5.1",
+    "webtorrent": "^2.0.18",
     "@undecaf/zbar-wasm": "^0.9.11",
     "@undecaf/barcode-detector-polyfill": "^0.9.13"
   },

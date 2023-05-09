@@ -1,4 +1,6 @@
 import { EL, HTMLElementExtended } from './htmlelementextended.js';
+import { WebTorrent } from 'webtorrent';
+
 /* global WebTorrent */
 /*
   This collection of video components is intended to allow a common syntax for embedding videos.
