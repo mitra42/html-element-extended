@@ -1,7 +1,6 @@
 import { EL, HTMLElementExtended } from './htmlelementextended.js';
-import { WebTorrent } from 'webtorrent';
+import WebTorrent from '/node_modules/webtorrent/dist/webtorrent.min.js';
 
-/* global WebTorrent */
 /*
   This collection of video components is intended to allow a common syntax for embedding videos.
 
@@ -157,10 +156,10 @@ video {width: 95%; height: 95%}
 class WebTorrentVideo extends HTMLElementExtended { // id=3058 uptake socap; TODO TEST id=2907 SNL Gore;
   // See https://github.com/webtorrent/webtorrent/blob/master/docs/api.md
   constructor() {
-    if (!WTclient) { WTclient = new WebTorrent(); WTclient.torrentsAdded = []; } // Lazy initiation as most often will not be using WT
     super();
     //this.state.WTwires = [];
     this.state.WTtorrent = null;
+    console.log("XXX WT-constructor");
   }
   // torrent can be a magnet link, or a URL to the torrent file, file can be a file name, or a path in the torrent
   static get observedAttributes() { return ['torrent', 'file', 'poster']; }
@@ -168,7 +167,10 @@ class WebTorrentVideo extends HTMLElementExtended { // id=3058 uptake socap; TOD
   // Only load if we have torrent and file
   shouldLoadWhenConnected() {
     const torrentId = this.state.torrent;
-    return (torrentId && this.state.file && !WTclient.get(torrentId) && !WTclient.torrentsAdded.includes(torrentId));
+    console.log("XXX shouldLoad = ", (torrentId && this.state.file && (!WTclient || !WTclient.torrentsAdded.includes(torrentId))));
+    //return (torrentId && this.state.file && !WTclient.get(torrentId) && !WTclient.torrentsAdded.includes(torrentId));
+    // Webtorrent3 has turned WTclient.get into async promise, while this is sync
+    return (torrentId && this.state.file && (!WTclient || !WTclient.torrentsAdded.includes(torrentId)));
   }
 
   changeAttribute(name, newValue) {
@@ -181,8 +183,9 @@ class WebTorrentVideo extends HTMLElementExtended { // id=3058 uptake socap; TOD
     super.changeAttribute(name, newValue);
   }
 
-  loadContent() {
-    const self = this; // Needed to get "this" into inner functions
+  loadContentAddTorrent() {
+    console.log("XXX loadContentAddTorrent");
+    const self = this;
     const torrentId = this.state.torrent;
     // TODO will need a way to add a 2nd file, when a torrent is already added but probably not for videos
     WTclient.torrentsAdded.push(torrentId); // Make sure do not add duplicate - this happens with URLs as do not know infohash till retrieved
@@ -212,11 +215,42 @@ class WebTorrentVideo extends HTMLElementExtended { // id=3058 uptake socap; TOD
       });
     });
   }
+  loadContent() {
+    console.log("XXX loadContent WTclient =",!!WTclient);
+    const self = this; // Needed to get "this" into inner functions
+    // Lazy initiation as most often will not be using WT but make sure to only run this once as
+    // loadContent will be called multiple times
+    if (!WTclient) { // Note this looks like a global to me
+      WTclient = new WebTorrent();
+      WTclient.ready = false;
+      WTclient.torrentsAdded = [];
+      navigator.serviceWorker.register('/node_modules/webtorrent/dist/sw.min.js')
+      // From top of https://github.com/webtorrent/webtorrent/blob/master/docs/api.md
+      // Anticipating problems from asynchronicity
+      console.log("XXX loadContent checking if ready");
+      navigator.serviceWorker.ready.then(
+        (controller) => {
+          console.log("XXX loadContent SW ready");
+          WTclient.createServer({controller})
+          WTclient.ready = true;
+          self.loadContent();
+        },
+        (error) => console.error(error)
+      );
+    } else {
+      // Have already created WTclient but might not be ready;
+      if (WTclient.ready) {
+        this.loadContentAddTorrent();
+      }
+    }
+  }
 
   render() {
     const el = EL('video', { width: '100%', height: '100%', poster: this.state.poster });
     if (this.state.WTfile) {
-      this.state.WTfile.renderTo(el);
+      //This was how it worked with render-media, but that is not an ESM
+      // this.state.WTfile.renderTo(el);
+      this.state.WTfile.streamTo(el)
     }
     const torrent = this.state.WTtorrent;
     console.log('torrent', torrent);
