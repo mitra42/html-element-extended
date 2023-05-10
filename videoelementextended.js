@@ -224,6 +224,7 @@ class WebTorrentVideo extends HTMLElementExtended { // id=3058 uptake socap; TOD
       WTclient = new WebTorrent();
       WTclient.ready = false;
       WTclient.torrentsAdded = [];
+      /*
       navigator.serviceWorker.register('/node_modules/webtorrent/dist/sw.min.js')
       // From top of https://github.com/webtorrent/webtorrent/blob/master/docs/api.md
       // Anticipating problems from asynchronicity
@@ -237,6 +238,11 @@ class WebTorrentVideo extends HTMLElementExtended { // id=3058 uptake socap; TOD
         },
         (error) => console.error(error)
       );
+      */
+      const instance = WTclient.createServer()
+      instance.server.listen(0);
+      WTclient.ready = true;
+      self.loadContent();
     } else {
       // Have already created WTclient but might not be ready;
       if (WTclient.ready) {
