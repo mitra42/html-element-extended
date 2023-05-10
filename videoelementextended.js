@@ -1,5 +1,6 @@
 import { EL, HTMLElementExtended } from './htmlelementextended.js';
-import WebTorrent from '/node_modules/webtorrent/dist/webtorrent.min.js';
+import WebTorrent from '../webtorrent/dist/webtorrent.min.js';
+//import WebTorrent from 'https://esm.sh/webtorrent'; // Should work - and get dependencies but doesnt
 
 /*
   This collection of video components is intended to allow a common syntax for embedding videos.
@@ -11,6 +12,7 @@ import WebTorrent from '/node_modules/webtorrent/dist/webtorrent.min.js';
   <content-video src="https://foo.com/bar.mp4"></content-video>
 
   TODO add support for archive parameter
+  NOTE - to work with webtorrent requires a copy of sw.min.js from node_modules/webtorrent/dist/sw.min.js as has to be served from root level
 
   Other sources of video may be added later
  */
@@ -239,16 +241,28 @@ class WebTorrentVideo extends HTMLElementExtended { // id=3058 uptake socap; TOD
       // At worst could special case in main.js to get from webtorrent
       // Note file URLs are of form /webtorrent/<torrentid>/<filename>
       // TODO-WT use something like that URL to recognize in content-video but repl torrentid with torrent's url ?
-      navigator.serviceWorker.register('./sw.min.js', { scope: './' })
+      //navigator.serviceWorker.register('./sw.min.js', { scope: './' }) // Works, but prefer /node_modules/webtorrent/dist/sw.min.js - TODO-WT make Main serve this
+      navigator.serviceWorker.register('/sw.min.js')
       // From top of https://github.com/webtorrent/webtorrent/blob/master/docs/api.md
       // Anticipating problems from asynchronicity
       console.log("XXX loadContent checking if ready");
       navigator.serviceWorker.ready.then(
         (controller) => {
-          console.log("XXX loadContent SW ready");
-          WTclient.createServer({controller})
-          WTclient.ready = true;
-          self.loadContent();
+          const worker = (controller.active || controller.waiting || controller.installing);
+          function createAndLoadIfActivated(worker) {
+            console.log("XXX loadContent SW ready worker:", worker.state);
+            if (worker.state === "activated") {
+              WTclient.createServer({controller})
+              WTclient.ready = true;
+              self.loadContentAddTorrent();
+              return true;
+            } else {
+              return false;
+            }
+          }
+          if (!createAndLoadIfActivated(worker) ) {
+            worker.addEventListener('statechange', ({ target }) => createAndLoadIfActivated(target))
+          }
         },
         (error) => console.error(error)
       );
