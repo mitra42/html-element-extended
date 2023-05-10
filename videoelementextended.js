@@ -117,11 +117,20 @@ class WebTorrentDebug extends HTMLElementExtended {
   attributeChangedCallback(name, oldValue, newValue) {
     super.attributeChangedCallback(name, oldValue, newValue);
     if (name === 'torrent' && newValue) {
-      this.state.wtTorrent = WTclient.get(newValue);
+      WTclient.get(newValue).then((torr) => {
+        this.state.wtTorrent = torr;
+        if (!this.state.wtTorrent) console.error("Didn't find torrent passed into debug");
+        this.state.wtTorrent.on('download', (unusedbytes) => {
+          this.renderAndReplace();
+        }); // Rerender each time download called
+      });
+      /* WT1.x.x
+      this.state.wtTorrent = WTclient.get(newValue);  // TODO-WT this is a Promise in 3.0
       if (!this.state.wtTorrent) console.error("Didn't find torrent passed into debug");
       this.state.wtTorrent.on('download', (unusedbytes) => {
         this.renderAndReplace();
       }); // Rerender each time download called
+       */
     }
   }
   renderPeer(p) {
@@ -224,8 +233,13 @@ class WebTorrentVideo extends HTMLElementExtended { // id=3058 uptake socap; TOD
       WTclient = new WebTorrent();
       WTclient.ready = false;
       WTclient.torrentsAdded = [];
-      /*
-      navigator.serviceWorker.register('/node_modules/webtorrent/dist/sw.min.js')
+
+      // TODO-WT once working see if can load from /node_modules/webtorrent/dist/sw.min.js or if
+      // this gives problems with scope
+      // At worst could special case in main.js to get from webtorrent
+      // Note file URLs are of form /webtorrent/<torrentid>/<filename>
+      // TODO-WT use something like that URL to recognize in content-video but repl torrentid with torrent's url ?
+      navigator.serviceWorker.register('./sw.min.js', { scope: './' })
       // From top of https://github.com/webtorrent/webtorrent/blob/master/docs/api.md
       // Anticipating problems from asynchronicity
       console.log("XXX loadContent checking if ready");
@@ -238,11 +252,12 @@ class WebTorrentVideo extends HTMLElementExtended { // id=3058 uptake socap; TOD
         },
         (error) => console.error(error)
       );
-      */
+      /*
       const instance = WTclient.createServer()
       instance.server.listen(0);
       WTclient.ready = true;
       self.loadContent();
+       */
     } else {
       // Have already created WTclient but might not be ready;
       if (WTclient.ready) {
@@ -252,10 +267,11 @@ class WebTorrentVideo extends HTMLElementExtended { // id=3058 uptake socap; TOD
   }
 
   render() {
-    const el = EL('video', { width: '100%', height: '100%', poster: this.state.poster });
+    const el = EL('video', { width: '100%', height: '100%', poster: this.state.poster, controls: true });
     if (this.state.WTfile) {
       //This was how it worked with render-media, but that is not an ESM
       // this.state.WTfile.renderTo(el);
+      console.log("Adding file from URL ", this.state.WTfile.streamURL)
       this.state.WTfile.streamTo(el)
     }
     const torrent = this.state.WTtorrent;
