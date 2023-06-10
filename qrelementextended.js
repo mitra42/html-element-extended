@@ -1,4 +1,5 @@
 import {EL, HTMLElementExtended} from "./htmlelementextended.js";
+import qrcode from "../qrcode-generator-es6/index.js";
 
 /* ---- QR Scanner component ---------------
   <qr-scanner onfound="(msg) => console.log('found QR',msg)></qr-scanner>  //TODO-NEXT test
@@ -143,13 +144,14 @@ class QRCodeExtended extends HTMLElementExtended {
   // TODO allow style to be passed in as a parameter - note currently not styled here, and may not be stylable by parent
   static get observedAttributes() { return ['text']; }; // Tell it what parms to load - note these are string parms, not objects which are handled differently
   render() {
-    let myCanvas = EL('canvas');
-    let text =  this.getAttribute('text');
-    QRCode.toCanvas(myCanvas,text, function (error) {
-      if (error) console.error(error);
-      console.log('QR displayed', text);
-    })
-    return [ myCanvas ];
+    const qr = new qrcode('0','H');
+    const text =  this.getAttribute('text');
+    qr.addData(text);
+    qr.make();
+    const div = EL('div')
+    div.innerHTML = qr.createSvgTag({});
+    // TODO Note will probably want to apply style either to svg (especially size) or to div and return div
+    return [ div.firstChild ];
   }
 }
 customElements.define('qrcode-extended', QRCodeExtended); // Pass it to browser, note it MUST be xxx-yyy
