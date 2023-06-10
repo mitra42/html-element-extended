@@ -23,7 +23,8 @@
   "exports": {
     "./htlmelementextended.js": "./htlmelementextended.js",
     "./qrelementextended.js": "./qrelementextended.js",
-    "./videoelementextended.js": "./videoelementextended.js"
+    "./videoelementextended.js": "./videoelementextended.js",
+    "./eventbus.js": "./eventbus.js"
   },
   "homepage": "https://github.com/mitra42/html-element-extended",
   "keywords": ["web components"],
