@@ -123,7 +123,8 @@ function EL(tag, attributes = {}, children) {
       if (['textContent', 'onsubmit', 'onclick', 'onchange', 'innerHTML', 'style', 'action'].includes(kv[0])) {
         el[kv[0]] = kv[1];
       } else if ((typeof kv[1] === 'object') && (kv[1] !== null)) {
-        el.state[kv[0]] = kv[1]; // e.g tagcloud, data
+        el.attributeChangedCallback(kv[0], null, kv[1]); // will do a state change, but can be subclassed like other attributes
+        // el.state[kv[0]] = kv[1]; // e.g tagcloud, data
       } else if (typeof kv[1] === 'function') {
         if (typeof el.state === 'undefined') el.state = {};
         // Experimental e.g. passing function on parent to daughter
