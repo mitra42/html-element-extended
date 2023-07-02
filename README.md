@@ -47,4 +47,4 @@ If you use them please introduce yourself in a git issue
 and I'll bear this in mind when making any breaking revisions. 
 
 ** eventbus.js
-TODO needs documenting - (used in experimental imap client)
+TODO needs documenting - (used in experimental imap client and simulator)
