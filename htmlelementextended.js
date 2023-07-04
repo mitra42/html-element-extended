@@ -275,6 +275,8 @@ class HTMLElementExtended extends HTMLElement {
   // for example in CategoryListOrItem on mitra.biz
   // Set observedAttributes to desired attributes from URL
   // Call loadAttributesFromURL() from within the constructor at the end, so at same place in LifeCycle as if in HTML i.e. before connected.
+  // However this is only compatable with somthing loaded from HTML, not from EL TODO figure out why
+  // for usage with EL add a method connectedCallback() { this.loadAttributesFromURL(); super.connectedCallback();}
   loadAttributesFromURL() {
     const sp = new URL(window.location.href).searchParams;
     this.constructor.observedAttributes
