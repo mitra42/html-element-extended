@@ -287,8 +287,9 @@ class HTMLElementExtended extends HTMLElement {
           // so need explicit changeAttribute,
           // That is good, as do not want extra call to renderAndReplace that is called from AttributeChanged
           // this may munge attribute before setting state
+          // Note this was recently changed for Simulator from being outside the (value !== null) suspect if this causes problems
+          this.changeAttribute(name, value); // Dont use getAttribute as forces null to 'null'
         }
-        this.changeAttribute(name, value); // Dont use getAttribute as forces null to 'null'
       });
   }
   // render an error message instead of the standard render - subclassable
