@@ -47,4 +47,9 @@ If you use them please introduce yourself in a git issue
 and I'll bear this in mind when making any breaking revisions. 
 
 ** eventbus.js
-TODO needs documenting - (used in experimental imap client and simulator)
+A simple event handler to hide the mechanisms
+
+* At the page level create e.g. `const bus = new EventBus`
+* At a receiving object typically   bus.register("foo",(evt) => {...})
+* At sending end bus.fire("foo",{a: 1, b: 2})
+* remove is rarely used, but is ther for completeness.

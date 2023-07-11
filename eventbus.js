@@ -1,4 +1,9 @@
-// TODO - add documentation for this - its used (and being developed) in imap client
+// A simple event handler to hide the mechanisms
+// At the page level create e.g. `const bus = new EventBus`
+// At a receiving object typically   bus.register("foo",(evt) => {...})
+// At sending end bus.fire("foo",{a: 1, b: 2})
+// remove is rarely used, but is ther for completeness.
+
 class EventBus {
     // Copied from https://itnext.io/handling-data-with-web-components-9e7e4a452e6e
     constructor() {
