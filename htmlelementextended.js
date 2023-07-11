@@ -176,6 +176,7 @@ class HTMLElementExtended extends HTMLElement {
    */
   /*
   constructor() - sets state, pulls variables from URL, or storage, binds functions etc
+  static get integerAttributes - return array of integer attributes, typically overridden in subclasses
   static get observedAttributes - return array of names of attributes (just strings) passed
   loadSetRenderAndReplace(url, q, cb) - fetch URL, set state from data, render new version
   changeAttribute(name, newValue) - set attributes on state{}, typically converts strings to numbers or bools etc
@@ -198,6 +199,8 @@ class HTMLElementExtended extends HTMLElement {
     this.state = {}; // Equivalent of React .state, store local state here
   }
 
+  // Overriddden to add new integer attributes
+  static get integerAttributes() { return []; }
   // Override this to return an array of (string) attributes passed
   static get observedAttributes() { return []; }
 

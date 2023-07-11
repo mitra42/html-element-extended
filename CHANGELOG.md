@@ -1,3 +1,4 @@
+* 0.0.7 Added integerAttributes
 * 0.0.6 Add event bus, 
 * 0.0.6 changeAttribute shouldnt be called if value=null when reading URL (at least not for "simulator" project)
 * 0.0.5 allow subclassing when setting an object parameter (needed for simulator)
