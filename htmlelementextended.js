@@ -221,7 +221,7 @@ class HTMLElementExtended extends HTMLElement {
   // TODO this could be more generalized for boolean, integer, etc attributes
   changeAttribute(name, newValue) {
     if (this.constructor.integerAttributes.includes(name)) {
-      newValue = parseInt(newValue);xx
+      newValue = parseInt(newValue);
     } // Fine if value is already an int
     if ((name === 'visible') && (newValue === 'false')) newValue = false;
     this.state[name] = newValue;
