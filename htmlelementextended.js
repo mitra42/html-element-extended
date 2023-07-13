@@ -220,6 +220,9 @@ class HTMLElementExtended extends HTMLElement {
   // This is called by attributeChangedCallback so new values end up in attributes (as strings) and in state (as bools, numbers etc)
   // TODO this could be more generalized for boolean, integer, etc attributes
   changeAttribute(name, newValue) {
+    if (this.constructor.integerAttributes.includes(name)) {
+      newValue = parseInt(newValue);xx
+    } // Fine if value is already an int
     if ((name === 'visible') && (newValue === 'false')) newValue = false;
     this.state[name] = newValue;
   }
