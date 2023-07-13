@@ -1,3 +1,4 @@
+* 0.0.8 Move integerAttributes to changeAttribute
 * 0.0.7 Added integerAttributes
 * 0.0.6 Add event bus, 
 * 0.0.6 changeAttribute shouldnt be called if value=null when reading URL (at least not for "simulator" project)
