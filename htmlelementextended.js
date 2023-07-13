@@ -267,7 +267,7 @@ class HTMLElementExtended extends HTMLElement {
     console.error('loadContent should be defined in a subclass if shouldLoadWhenConnected ever returns true');
   }
   // render() a new set of nodes, then remove existing ones and add new ones
-  // Usually subclass render() but subclass this if cachine the render as done in "simulator"
+  // Unlikely to be subclassed (subclass this.render)
   renderAndReplace() {
     // console.log(this.localName, 'RenderAndReplace', this.isLoaded);
     const rendered = [this.render()];
