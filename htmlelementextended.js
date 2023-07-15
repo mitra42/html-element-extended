@@ -267,13 +267,19 @@ class HTMLElementExtended extends HTMLElement {
     console.error('loadContent should be defined in a subclass if shouldLoadWhenConnected ever returns true');
   }
   // render() a new set of nodes, then remove existing ones and add new ones
-  // Unlikely to be subclassed (subclass this.render)
+  // render0 is intentionally undefined - its absence means try a render
   renderAndReplace() {
     // console.log(this.localName, 'RenderAndReplace', this.isLoaded);
-    const rendered = [this.render()];
-    while (this.shadowRoot.childNodes.length > 0) this.shadowRoot.childNodes[0].remove();
-    /* Flatten render (not sure why at depth=3), eliminate any undefined */
-    this.shadowRoot.append(...rendered.flat(3).filter((n) => !!n));
+    if (!this.render0) {
+      const rendered = this.render();
+      while (this.shadowRoot.childNodes.length > 0) this.shadowRoot.childNodes[0].remove();
+      /* Flatten render (not sure why at depth=3), eliminate any undefined */
+      this.shadowRoot.append(...[rendered].flat(3).filter((n) => !!n));
+    } else if (!this.state.rendered) {
+      this.state.rendered = true;
+      const rendered = this.render0();
+      this.shadowRoot.append(...[rendered].flat(3).filter((n) => !!n));
+    }
   }
 
   // Load attributes from URL instead of HTML,
