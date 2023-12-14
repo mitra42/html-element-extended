@@ -1,4 +1,8 @@
+// noinspection JSPotentiallyInvalidConstructorUsage
+
 import {EL, HTMLElementExtended} from "./htmlelementextended.js";
+// TODO presumes qtcode-generator-es6 installed as peer, should probably peel this off
+// TODO as seperate repo that requires html-element-extended and qrcode-generator-es6
 import qrcode from "../qrcode-generator-es6/index.js";
 
 /* ---- QR Scanner component ---------------
@@ -84,7 +88,7 @@ class QRScanExtended extends HTMLElementExtended {
           detector.detect(canvasElement)
             .catch((err) =>
               this.message('Barcode detect error', err))
-            .then((barcodes, err) => {
+            .then((barcodes, unusedErr) => {
               if (barcodes.length > 0) {
                 const qr = barcodes[0]; // Ignore after first found
                 this.canvas_drawSquare(qr.cornerPoints);
@@ -141,7 +145,7 @@ customElements.define('qrscan-extended', QRScanExtended);
 
 class QRCodeExtended extends HTMLElementExtended {
   // constructor() { super(); } // Default calls super
-  // TODO allow style to be passed in as a parameter - note currently not styled here, and may not be stylable by parent
+  // TODO allow style to be passed in as a parameter - note currently not styled here, and may not be styleable by parent
   static get observedAttributes() { return ['text']; }; // Tell it what parms to load - note these are string parms, not objects which are handled differently
   render() {
     const qr = new qrcode('0','H');

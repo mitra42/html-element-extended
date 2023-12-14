@@ -151,6 +151,7 @@ function getUrl(domain, q) {
    * query: Object containing parameters for query part of url.
    *  Will strip out nulls
    */
+  // noinspection JSCheckFunctionSignatures
   const query = Object.entries(q)
     .filter((kv) => ((kv[1] != null) && (typeof kv[1] !== 'undefined')))
     .map((kv) => `${kv[0]}=${encodeURIComponent(kv[1])}`)
@@ -199,7 +200,7 @@ class HTMLElementExtended extends HTMLElement {
     this.state = {}; // Equivalent of React .state, store local state here
   }
 
-  // Overriddden to add new integer attributes
+  // Overridden to add new integer attributes
   static get integerAttributes() { return []; }
   // Override this to return an array of (string) attributes passed
   static get observedAttributes() { return []; }
@@ -287,7 +288,7 @@ class HTMLElementExtended extends HTMLElement {
   // for example in CategoryListOrItem on mitra.biz
   // Set observedAttributes to desired attributes from URL
   // Call loadAttributesFromURL() from within the constructor at the end, so at same place in LifeCycle as if in HTML i.e. before connected.
-  // However this is only compatable with somthing loaded from HTML, not from EL TODO figure out why
+  // However this is only compatible with something loaded from HTML, not from EL TODO figure out why
   // for usage with EL add a method connectedCallback() { this.loadAttributesFromURL(); super.connectedCallback();}
   loadAttributesFromURL() {
     const sp = new URL(window.location.href).searchParams;

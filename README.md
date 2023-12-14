@@ -37,13 +37,13 @@ Use HTMLElementExtended to build a QR scanner and a QR display
 
 ** videoelementextended.js
 
-Uses HTMLElementExtended to create a number of video webComponents that 
+Uses HTMLElementExtended to create [yaml2sqlite.js](..%2F..%2Fmitrabiz%2Fserver%2Fyaml2sqlite.js)a number of video webComponents that 
 know how to display videos from a variety of sources (based on the URL)
 allowing a single <ContentVideo> component to handle 
 YouTube, Vimeo, Internet Archive, WebTorrent etc. 
 
 Note - all of these are under development. 
-If you use them please introduce yourself in a git issue 
+If you use them please introduce yourself in a git issue, 
 and I'll bear this in mind when making any breaking revisions. 
 
 ** eventbus.js
@@ -52,4 +52,11 @@ A simple event handler to hide the mechanisms
 * At the page level create e.g. `const bus = new EventBus`
 * At a receiving object typically   bus.register("foo",(evt) => {...})
 * At sending end bus.fire("foo",{a: 1, b: 2})
-* remove is rarely used, but is ther for completeness.
+* remove is rarely used, but is there for completeness.
+
+** Upgrading packages
+There is a fair bit of instability at the moment (July 2023) in npm 
+with modules and commonJS coexisting. 
+The following document some of the issues with upgrading
+*** webtorrent
+At some point webtorrent.min.js was moved into dist/ certainl[sqllib.js](..%2F..%2Fmitrabiz%2Fserver%2Fsqllib.js)y there in 2.1.13

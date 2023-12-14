@@ -1,6 +1,8 @@
 import { EL, HTMLElementExtended } from './htmlelementextended.js';
+//TODO this presumes webtorrent is installed as a peer, that may not be true, ideally
+//TODO should split videoelementextended to its own repo that requires webtorrent and html-element-extended
 import WebTorrent from '../webtorrent/dist/webtorrent.min.js';
-//import WebTorrent from 'https://esm.sh/webtorrent'; // Should work - and get dependencies but doesnt
+//import WebTorrent from 'https://esm.sh/webtorrent'; // Should work - and get dependencies but does not
 
 /*
   This collection of video components is intended to allow a common syntax for embedding videos.
@@ -30,6 +32,11 @@ class YouTubeVideo extends HTMLElementExtended {
   iframesrc() { // Return src converted how YouTube wants it
     return `https://www.youtube.com/embed/${this.videoid()}`;
   }
+  /* Note youTube keeps changing what is required, as of 2023-09-05 their embeds look like ...
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/Tpozw1CAxmU?si=N25QcimlOtp6dg8g"
+  title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media;
+   gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+   */
   render() { // Note this has to match transformation in Main.js of content-video for RSS and ATOM
     /* //YouTube broke this at some point - was failing Dec2022
         return EL('object', { width: "100%", height: "100%" }, [
@@ -57,7 +64,7 @@ class VimeoVideo extends HTMLElementExtended {
   //loadContent() { this.renderAndReplace(); }
   videoid() {
     // Extract id from variety of URLs: https://vimeo.com/5282859 is only one seen so far
-    // If add formats, then better to canonicalize in sql an content.yaml so rss converter can be simpler
+    // If add formats, then better to canonicalize in sql and content.yaml so rss converter can be simpler
     return this.state.src.replace(/^http(s)?:\/\/(www.)?vimeo.com\/([0-9]+)$/, '$3');
   }
   render() { // TODO Note this has to match transformation in Main.js of content-video for RSS and ATOM
@@ -245,6 +252,7 @@ class WebTorrentVideo extends HTMLElementExtended { // id=3058 uptake socap; TOD
       navigator.serviceWorker.register('/sw.min.js')
       // From top of https://github.com/webtorrent/webtorrent/blob/master/docs/api.md
       // Anticipating problems from asynchronicity
+      // TODO Note error checking flags register call above as returning a ignored promise.
       console.log("XXX loadContent checking if ready");
       navigator.serviceWorker.ready.then(
         (controller) => {
@@ -314,7 +322,7 @@ class ContentVideo extends HTMLElementExtended {
 
   render() { // Note this has to match transformation in Main.js of content-video for RSS and ATOM
     //'<div style="width: 480px; height: 390px"><object width="100%" height="100%"><param name="movie" value="$1"><param name="allowFullScreen" value="true"/><param name="allowscriptaccess" value="always"/></object></div>'
-    //'<div style="width: 480px; height: 390px"><video width="100%" height="100%" controles="true"><source src="$1" type="video/mp4"/></video></div>'
+    //'<div style="width: 480px; height: 390px"><video width="100%" height="100%" controls="true"><source src="$1" type="video/mp4"/></video></div>'
     return [
       EL('style', { textContent: videoStyle }), // May need mitrabiz.css but should not
       EL('div', { class: 'video' }, [
