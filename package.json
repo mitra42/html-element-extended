@@ -9,7 +9,7 @@
   "description": "A simple wrapper for web components and some examples",
   "dependencies": {
     "qrcode-generator-es6": "^1.1.4",
-    "webtorrent": "^2.0.18",
+    "webtorrent": "^2.1.25",
     "@undecaf/zbar-wasm": "^0.9.11",
     "@undecaf/barcode-detector-polyfill": "^0.9.13"
   },
@@ -32,5 +32,5 @@
   "name": "html-element-extended",
   "scripts": {},
   "type": "module",
-  "version": "0.0.10"
+  "version": "0.0.11"
 }
