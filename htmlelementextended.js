@@ -12,7 +12,6 @@
   - never used directly, it is a base class, extends HTMLElement, and is itself extended for each webcomponent
   - for documentation see the class
 */
-// TODO - move to git, then to node module
 /*
 
   //Generally to construct a new Element class this is an example
@@ -159,24 +158,12 @@ function getUrl(domain, q) {
   return query.length ? `${domain}?${query}` : domain;
 }
 
-/*
-//TODO ErrorLoadingWrapper is deprecated, subclass renderLocal in other users
-const ErrorLoadingWrapper = ({ url, qdata, err }, children) => (
-   // Wrapped around element tree to replace it with Error message or loading warning
-  err
-    ? EL('div', { class: 'error' }, [`Error on ${url}`, EL('br'), err.message])
-    : !qdata
-      ? EL('span', { textContent: 'Loading...' })
-      : children
-);
-*/
-
 class HTMLElementExtended extends HTMLElement {
   /*
     Parent class for extending HTMLElement for a new element, usually an element will extend this instead of HTMLElement
    */
   /*
-  constructor() - sets state, pulls variables from URL, or storage, binds functions etc
+  constructor() - sets state, pulls variables from URL, or storage, binds functions etc.
   static get integerAttributes - return array of integer attributes, typically overridden in subclasses
   static get observedAttributes - return array of names of attributes (just strings) passed
   loadSetRenderAndReplace(url, q, cb) - fetch URL, set state from data, render new version

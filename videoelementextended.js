@@ -148,9 +148,9 @@ class WebTorrentDebug extends HTMLElementExtended {
       EL('span', { class: 'peer' }, [
         EL('span', { textContent: p.type + ' ' }),
         EL('span', { textContent: p.wire && prettyPrint(p.wire.downloaded) }),
-        EL('span', { textContent: 'B ' }), //TODO pretty print
+        EL('span', { textContent: 'B ' }),
         EL('span', { textContent: p.wire && prettyPrint(p.wire.downloadSpeed()) }),
-        EL('span', { textContent: 'B/s ' }), //TODO pretty print
+        EL('span', { textContent: 'B/s ' }),
       ]),
     ];
   }
