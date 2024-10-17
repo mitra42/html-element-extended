@@ -107,7 +107,9 @@ function GET(httpurl, opts, cb) {
       cb(err); // Tell queue done with an error
     });
 }
-
+function toBool(value) {
+  return ["true", "TRUE", 1, "1", true].includes(value);
+}
 // Standardish routing to allow nesting Elements inside JS
 function EL(tag, attributes = {}, children) {
   /**
@@ -119,8 +121,10 @@ function EL(tag, attributes = {}, children) {
   const el = document.createElement(tag);
   Object.entries(attributes)
     .forEach((kv) => {
-      if (['textContent', 'onsubmit', 'onclick', 'onchange', 'innerHTML', 'style', 'action'].includes(kv[0])) {
+      if (['textContent', 'onsubmit', 'onclick', 'onchange', 'innerHTML', 'style', 'action', 'checked', 'indeterminate'].includes(kv[0])) {
         el[kv[0]] = kv[1];
+      } else if (['checked', 'indeterminate'].includes(kv[0])) {
+        el[kv[0]] = toBool(kv[1]);
       } else if ((typeof kv[1] === 'object') && (kv[1] !== null)) {
         el.attributeChangedCallback(kv[0], null, kv[1]); // will do a state change, but can be subclassed like other attributes
         // el.state[kv[0]] = kv[1]; // e.g tagcloud, data
@@ -189,6 +193,8 @@ class HTMLElementExtended extends HTMLElement {
 
   // Overridden to add new integer attributes
   static get integerAttributes() { return []; }
+  // Overriddden to add new float attributes
+  static get floatAttributes() { return []; }
   // Override this to return an array of (string) attributes passed
   static get observedAttributes() { return []; }
 
@@ -210,6 +216,9 @@ class HTMLElementExtended extends HTMLElement {
   changeAttribute(name, newValue) {
     if (this.constructor.integerAttributes.includes(name)) {
       newValue = parseInt(newValue);
+    } // Fine if value is already an int
+    if (this.constructor.floatAttributes.includes(name)) {
+      newValue = parseFloat(newValue);
     } // Fine if value is already an int
     if ((name === 'visible') && (newValue === 'false')) newValue = false;
     this.state[name] = newValue;
@@ -275,7 +284,7 @@ class HTMLElementExtended extends HTMLElement {
   // for example in CategoryListOrItem on mitra.biz
   // Set observedAttributes to desired attributes from URL
   // Call loadAttributesFromURL() from within the constructor at the end, so at same place in LifeCycle as if in HTML i.e. before connected.
-  // However this is only compatible with something loaded from HTML, not from EL TODO figure out why
+  // However this is only compatible with somthing loaded from HTML, not from EL TODO figure out why
   // for usage with EL add a method connectedCallback() { this.loadAttributesFromURL(); super.connectedCallback();}
   loadAttributesFromURL() {
     const sp = new URL(window.location.href).searchParams;
@@ -315,4 +324,4 @@ class HTMLElementExtended extends HTMLElement {
 
 //TODO should probably remove from classList in an disconnectedCallback (support in HTMLElementExtended) see CategoryListOrItem.renderAndReplace
 //TODO I thought GETp and GET probably will not be used outside here - but appear to be...
-export { GETp, GET, EL, getUrl, HTMLElementExtended }; // ErrorLoadingWrapper removed
+export { GETp, GET, EL, getUrl, HTMLElementExtended, toBool }; // ErrorLoadingWrapper removed
