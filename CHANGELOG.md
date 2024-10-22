@@ -1,3 +1,4 @@
+* 0.0.12 support iterators as children
 * 0.0.11 support bool & float attributes, video: support webShare  
 * 0.0.10 support render0 (used in simulator) no change to render otherwise
 * 0.0.9 oops

@@ -137,11 +137,15 @@ function EL(tag, attributes = {}, children) {
         el.setAttribute(kv[0], kv[1]);
       }
     });
-  if (children) {
-    if (Array.isArray(children)) {
-      el.append(...children.flat(3).filter((n) => !!n));
+  let k = children;
+  if (k) {
+    if (typeof k[Symbol.iterator] === 'function') {
+      k = Array.from(k);
+    }
+    if (Array.isArray(k)) {
+      el.append(...k.flat(3).filter((n) => !!n));
     } else {
-      el.append(children);
+      el.append(k);
     }
   }
   return el;
