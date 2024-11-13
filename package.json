@@ -8,10 +8,6 @@
   "bugs": "https://github.com/mitra42/html-element-extended/issues",
   "description": "A simple wrapper for web components and some examples",
   "dependencies": {
-    "qrcode-generator-es6": "^1.1.4",
-    "webtorrent": "^2.1.25",
-    "@undecaf/zbar-wasm": "^0.9.11",
-    "@undecaf/barcode-detector-polyfill": "^0.9.13"
   },
   "devDependencies": {
     "eslint": "^7.27.0",
@@ -22,8 +18,6 @@
   },
   "exports": {
     "./htlmelementextended.js": "./htlmelementextended.js",
-    "./qrelementextended.js": "./qrelementextended.js",
-    "./videoelementextended.js": "./videoelementextended.js",
     "./eventbus.js": "./eventbus.js"
   },
   "homepage": "https://github.com/mitra42/html-element-extended",
@@ -32,5 +26,5 @@
   "name": "html-element-extended",
   "scripts": {},
   "type": "module",
-  "version": "0.0.12"
+  "version": "0.1.0"
 }
