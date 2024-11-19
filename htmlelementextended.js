@@ -173,6 +173,7 @@ class HTMLElementExtended extends HTMLElement {
   /*
   constructor() - sets state, pulls variables from URL, or storage, binds functions etc.
   static get integerAttributes - return array of integer attributes, typically overridden in subclasses
+  static get floatAttributes - return array of integer attributes, typically overridden in subclasses
   static get observedAttributes - return array of names of attributes (just strings) passed
   loadSetRenderAndReplace(url, q, cb) - fetch URL, set state from data, render new version
   changeAttribute(name, newValue) - set attributes on state{}, typically converts strings to numbers or bools etc
@@ -268,7 +269,7 @@ class HTMLElementExtended extends HTMLElement {
     console.error('loadContent should be defined in a subclass if shouldLoadWhenConnected ever returns true');
   }
   // render() a new set of nodes, then remove existing ones and add new ones
-  // render0 is intentionally undefined - its absence means try a render
+  // render0 is intentionally undefined - its absence means try a render, its presence means only render once.
   renderAndReplace() {
     // console.log(this.localName, 'RenderAndReplace', this.isLoaded);
     if (!this.render0) {
