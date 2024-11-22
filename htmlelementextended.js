@@ -121,10 +121,10 @@ function EL(tag, attributes = {}, children) {
   const el = document.createElement(tag);
   Object.entries(attributes)
     .forEach((kv) => {
-      if (['textContent', 'onsubmit', 'onclick', 'onchange', 'innerHTML', 'style', 'action', 'checked', 'indeterminate'].includes(kv[0])) {
+      if (['textContent', 'onsubmit', 'onclick', 'onchange', 'innerHTML', 'style', 'action'].includes(kv[0])) {
         el[kv[0]] = kv[1];
-      } else if (['checked', 'indeterminate'].includes(kv[0])) {
-        el[kv[0]] = toBool(kv[1]);
+      } else if (['checked', 'indeterminate', 'selected'].includes(kv[0])) { //TODO this should be generic
+        el[kv[0]] = toBool(kv[1]);  // Booleans are set as fields of the element
       } else if ((typeof kv[1] === 'object') && (kv[1] !== null)) {
         el.attributeChangedCallback(kv[0], null, kv[1]); // will do a state change, but can be subclassed like other attributes
         // el.state[kv[0]] = kv[1]; // e.g tagcloud, data
