@@ -1,3 +1,4 @@
+* 0.1.2 support boolAttributes (for discover on frugal-iot)
 * 0.1.1 Fixed an issue with boolean parameters not showing boolean false
 * 0.1.0 Split out qrelementextended and videoelementextended as own repos and modules
 * 0.0.12 support iterators as children

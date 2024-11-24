@@ -108,7 +108,8 @@ function GET(httpurl, opts, cb) {
     });
 }
 function toBool(value) {
-  return ["true", "TRUE", 1, "1", true].includes(value);
+  // The "" may or may not be correct, when used as a webcomponent  <foo-bar discover> will pass a value of "", unclear if there is any existing example where empty string is presumed false
+  return ["true", "TRUE", 1, "1", true, ""].includes(value);
 }
 // Standardish routing to allow nesting Elements inside JS
 function EL(tag, attributes = {}, children) {
@@ -200,6 +201,8 @@ class HTMLElementExtended extends HTMLElement {
   static get integerAttributes() { return []; }
   // Overriddden to add new float attributes
   static get floatAttributes() { return []; }
+  // Overriddden to add new boolean attributes
+  static get boolAttributes() { return []; }
   // Override this to return an array of (string) attributes passed
   static get observedAttributes() { return []; }
 
@@ -225,7 +228,10 @@ class HTMLElementExtended extends HTMLElement {
     if (this.constructor.floatAttributes.includes(name)) {
       newValue = parseFloat(newValue);
     } // Fine if value is already an int
-    if ((name === 'visible') && (newValue === 'false')) newValue = false;
+    if (this.constructor.boolAttributes.includes(name)) {
+      newValue = toBool(newValue);
+    }
+    if ((name === 'visible') && (newValue === 'false')) newValue = false; // TODO find where used and create boolAttributes
     this.state[name] = newValue;
   }
   // Loop through all the object returned from a query and set state,
