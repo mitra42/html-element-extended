@@ -65,6 +65,9 @@
   And loadContent -> loadSetRenderAndReplace to update any data and re-render.
 */
 
+// For now using yaml imported by caller
+// import yaml from "js-yaml";
+
 async function GETp(httpurl, opts) {
   /**
    *  Asynchronous function to perform http query - returns promise that resolves to JSON or rejects an error
@@ -90,6 +93,8 @@ async function GETp(httpurl, opts) {
   const response = await fetch(req);
   if (!response.ok) {
     throw new Error(`${httpurl} ${response.status}: ${response.statusText}`);
+  } else if (response.headers.get('Content-Type').startsWith('text/yaml')) {
+    return response.body; // Let caller handle it
   } else if (!response.headers.get('Content-Type').startsWith('application/json')) {
     throw new Error(`Query for ${httpurl} Did not return JSON`);
   } else {
