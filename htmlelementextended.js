@@ -114,8 +114,13 @@ function GET(httpurl, opts, cb) {
 }
 function toBool(value) {
   // The "" may or may not be correct, when used as a webcomponent  <foo-bar discover> will pass a value of "", unclear if there is any existing example where empty string is presumed false
-  return ["true", "TRUE", 1, "1", true, ""].includes(value);
+  return ["true", "TRUE", 1, "1", "1.0", true, ""].includes(value);
 }
+// Used to apply different rules to boolean properties
+// Note form.autocomplete is text "on" or "off"  translate is yes/no
+booleanAttributes = ['autofocus','autoplay','checked','contenteditable','controls','default',
+  'defer','disabled','draggable','hidden','indeterminate','inert','loop','multiple','muted',
+  'novalidate','open','readonly','required','selected','spellcheck']
 // Standardish routing to allow nesting Elements inside JS
 function EL(tag, attributes = {}, children) {
   /**
@@ -129,7 +134,7 @@ function EL(tag, attributes = {}, children) {
     .forEach((kv) => {
       if (['textContent', 'onsubmit', 'onclick', 'onchange', 'innerHTML', 'style', 'action'].includes(kv[0])) {
         el[kv[0]] = kv[1];
-      } else if (['checked', 'indeterminate', 'selected'].includes(kv[0])) { //TODO this should be generic
+      } else if (booleanAttributes.includes(`${tag}.${kv[0]})) {
         el[kv[0]] = toBool(kv[1]);  // Booleans are set as fields of the element
       } else if ((typeof kv[1] === 'object') && (kv[1] !== null)) {
         el.attributeChangedCallback(kv[0], null, kv[1]); // will do a state change, but can be subclassed like other attributes
@@ -261,6 +266,7 @@ class HTMLElementExtended extends HTMLElement {
     if (this.shouldLoadWhenConnected()) this.loadContent();
     // Note this render is done before loadContent complete, loadContent typically will call renderAndReplace again
     // renderAndReplace should test if it wants to render an empty element if there is no data
+    // Note that some users of this library are prefering a connectedCallback that doesn't renderAndReplace and uses 'slot' etc
     this.renderAndReplace();
   }
   // Called whenever an attribute is added or changed,
