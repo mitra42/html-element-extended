@@ -134,7 +134,7 @@ function EL(tag, attributes = {}, children) {
     .forEach((kv) => {
       if (['textContent', 'onsubmit', 'onclick', 'onchange', 'innerHTML', 'style', 'action'].includes(kv[0])) {
         el[kv[0]] = kv[1];
-      } else if (booleanAttributes.includes(`${tag}.${kv[0]})) {
+      } else if (booleanAttributes.includes(kv[0])) {
         el[kv[0]] = toBool(kv[1]);  // Booleans are set as fields of the element
       } else if ((typeof kv[1] === 'object') && (kv[1] !== null)) {
         el.attributeChangedCallback(kv[0], null, kv[1]); // will do a state change, but can be subclassed like other attributes
