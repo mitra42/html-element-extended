@@ -118,7 +118,7 @@ function toBool(value) {
 }
 // Used to apply different rules to boolean properties
 // Note form.autocomplete is text "on" or "off"  translate is yes/no
-booleanAttributes = ['autofocus','autoplay','checked','contenteditable','controls','default',
+let booleanAttributes = ['autofocus','autoplay','checked','contenteditable','controls','default',
   'defer','disabled','draggable','hidden','indeterminate','inert','loop','multiple','muted',
   'novalidate','open','readonly','required','selected','spellcheck']
 // Standardish routing to allow nesting Elements inside JS
@@ -209,9 +209,9 @@ class HTMLElementExtended extends HTMLElement {
 
   // Overridden to add new integer attributes
   static get integerAttributes() { return []; }
-  // Overriddden to add new float attributes
+  // Overridden to add new float attributes
   static get floatAttributes() { return []; }
-  // Overriddden to add new boolean attributes
+  // Overridden to add new boolean attributes
   static get boolAttributes() { return []; }
   // Override this to return an array of (string) attributes passed
   static get observedAttributes() { return []; }
@@ -266,7 +266,7 @@ class HTMLElementExtended extends HTMLElement {
     if (this.shouldLoadWhenConnected()) this.loadContent();
     // Note this render is done before loadContent complete, loadContent typically will call renderAndReplace again
     // renderAndReplace should test if it wants to render an empty element if there is no data
-    // Note that some users of this library are prefering a connectedCallback that doesn't renderAndReplace and uses 'slot' etc
+    // Note that some users of this library are preferring a connectedCallback that doesn't renderAndReplace and uses 'slot' etc
     this.renderAndReplace();
   }
   // Called whenever an attribute is added or changed,
@@ -306,7 +306,7 @@ class HTMLElementExtended extends HTMLElement {
   // for example in CategoryListOrItem on mitra.biz
   // Set observedAttributes to desired attributes from URL
   // Call loadAttributesFromURL() from within the constructor at the end, so at same place in LifeCycle as if in HTML i.e. before connected.
-  // However this is only compatible with somthing loaded from HTML, not from EL TODO figure out why
+  // However this is only compatible with something loaded from HTML, not from EL TODO figure out why
   // for usage with EL add a method connectedCallback() { this.loadAttributesFromURL(); super.connectedCallback();}
   loadAttributesFromURL() {
     const sp = new URL(window.location.href).searchParams;
