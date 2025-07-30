@@ -230,7 +230,6 @@ class HTMLElementExtended extends HTMLElement {
   // changeAttribute will be called for each attribute changed,
   // its most common use is to turn string values into data and is subclassed to do so.
   // This is called by attributeChangedCallback so new values end up in attributes (as strings) and in state (as bools, numbers etc)
-  // TODO this could be more generalized for boolean, integer, etc attributes
   changeAttribute(name, newValue) {
     if (this.constructor.integerAttributes.includes(name)) {
       newValue = parseInt(newValue);
@@ -241,7 +240,7 @@ class HTMLElementExtended extends HTMLElement {
     if (this.constructor.boolAttributes.includes(name)) {
       newValue = toBool(newValue);
     }
-    if ((name === 'visible') && (newValue === 'false')) newValue = false; // TODO find where used and create boolAttributes
+    //if ((name === 'visible') && (newValue === 'false')) newValue = false; // Old way before had boolAttributes on anything using "visible"
     this.state[name] = newValue;
   }
   // Loop through all the object returned from a query and set state,
