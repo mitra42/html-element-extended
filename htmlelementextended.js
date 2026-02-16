@@ -92,7 +92,9 @@ async function GETp(httpurl, opts) {
   const req = new Request(httpurl, init);
   const response = await fetch(req);
   if (!response.ok) {
-    throw new Error(`${httpurl} ${response.status}: ${response.statusText}`);
+    const errorText = await response.text();
+    let err =  new Error(errorText || `${httpurl} ${response.status}: response.statusText}`);
+    throw(err);
   } else if (response.headers.get('Content-Type').startsWith('text/yaml')) {
     return response.body; // Let caller handle it
   } else if (!response.headers.get('Content-Type').startsWith('application/json')) {
