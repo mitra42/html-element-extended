@@ -177,7 +177,7 @@ function getUrl(domain, q) {
   return query.length ? `${domain}?${query}` : domain;
 }
 
-class HTMLElementExtended extends HTMLElement {
+class HTMLElementExtendedMinimum extends HTMLElement {
   /*
     Parent class for extending HTMLElement for a new element, usually an element will extend this instead of HTMLElement
    */
@@ -202,7 +202,6 @@ class HTMLElementExtended extends HTMLElement {
   constructor() {
     super();
     // console.log(this.localName, "Constructor START"); // uncomment for debugging
-    this.attachShadow({ mode: 'open' });
     // Could just create this.state, but dealing with bug report - see note in EL() where
     this.state = {}; // Equivalent of React .state, store local state here
   }
@@ -230,6 +229,7 @@ class HTMLElementExtended extends HTMLElement {
   // changeAttribute will be called for each attribute changed,
   // its most common use is to turn string values into data and is subclassed to do so.
   // This is called by attributeChangedCallback so new values end up in attributes (as strings) and in state (as bools, numbers etc)
+  // TODO this could be more generalized for boolean, integer, etc attributes
   changeAttribute(name, newValue) {
     if (this.constructor.integerAttributes.includes(name)) {
       newValue = parseInt(newValue);
@@ -240,7 +240,7 @@ class HTMLElementExtended extends HTMLElement {
     if (this.constructor.boolAttributes.includes(name)) {
       newValue = toBool(newValue);
     }
-    //if ((name === 'visible') && (newValue === 'false')) newValue = false; // Old way before had boolAttributes on anything using "visible"
+    if ((name === 'visible') && (newValue === 'false')) newValue = false; // TODO find where used and create boolAttributes
     this.state[name] = newValue;
   }
   // Loop through all the object returned from a query and set state,
@@ -270,7 +270,7 @@ class HTMLElementExtended extends HTMLElement {
   }
   // Called whenever an attribute is added or changed,
   // https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements#using_the_lifecycle_callbacks
-  // unlikely to be subclassed
+  // unlikely to be subclassed except to change behavior of when calls renderAndReplace
   attributeChangedCallback(name, oldValue, newValue) {
     // console.log(this.localName, 'Attribute Changed', name); // uncomment for debugging
     this.changeAttribute(name, newValue); // Sets state{} may also munge value (e.g. string to boolean)
@@ -342,7 +342,13 @@ class HTMLElementExtended extends HTMLElement {
   }
   // renderLoaded - intentionally undefined, must be defined in subclass, or deprecated render()
 }
+class HTMLElementExtended extends HTMLElementExtendedMinimum {
+  constructor(props) {
+    super(props);
+    this.attachShadow({ mode: 'open' });
+  }
+}
 
 //TODO should probably remove from classList in an disconnectedCallback (support in HTMLElementExtended) see CategoryListOrItem.renderAndReplace
 //TODO I thought GETp and GET probably will not be used outside here - but appear to be...
-export { GETp, GET, EL, getUrl, HTMLElementExtended, toBool }; // ErrorLoadingWrapper removed
+export { GETp, GET, EL, getUrl, HTMLElementExtendedMinimum, HTMLElementExtended, toBool }; // ErrorLoadingWrapper removed
