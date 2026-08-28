@@ -286,19 +286,27 @@ class HTMLElementExtendedMinimum extends HTMLElement {
   loadContent() {
     console.error('loadContent should be defined in a subclass if shouldLoadWhenConnected ever returns true');
   }
+  // Where render() output goes: the shadow root on HTMLElementExtended, the element itself on
+  // HTMLElementExtendedMinimum, which attaches no shadow root.
+  // Note a Minimum subclass renders into its own light DOM, so it cannot use <slot> and any
+  // author-supplied children are replaced - use render0 if children must survive.
+  get renderRoot() {
+    return this.shadowRoot || this;
+  }
   // render() a new set of nodes, then remove existing ones and add new ones
   // render0 is intentionally undefined - its absence means try a render, its presence means only render once.
   renderAndReplace() {
     // console.log(this.localName, 'RenderAndReplace', this.isLoaded);
+    const root = this.renderRoot;
     if (!this.render0) {
       const rendered = this.render();
-      while (this.shadowRoot.childNodes.length > 0) this.shadowRoot.childNodes[0].remove();
+      while (root.childNodes.length > 0) root.childNodes[0].remove();
       /* Flatten render (not sure why at depth=3), eliminate any undefined */
-      this.shadowRoot.append(...[rendered].flat(3).filter((n) => !!n));
+      root.append(...[rendered].flat(3).filter((n) => !!n));
     } else if (!this.state.rendered) {
       this.state.rendered = true;
       const rendered = this.render0();
-      this.shadowRoot.append(...[rendered].flat(3).filter((n) => !!n));
+      root.append(...[rendered].flat(3).filter((n) => !!n));
     }
   }
 

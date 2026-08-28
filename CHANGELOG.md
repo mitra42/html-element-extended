@@ -1,3 +1,4 @@
+* 0.1.7 (unreleased) renderAndReplace renders into the element itself when there is no shadow root, so HTMLElementExtendedMinimum subclasses can render
 * 0.1.2 support boolAttributes (for discover on frugal-iot)
 * 0.1.1 Fixed an issue with boolean parameters not showing boolean false
 * 0.1.0 Split out qrelementextended and videoelementextended as own repos and modules
